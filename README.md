@@ -21,7 +21,7 @@ Dự án Nhận dạng và Dịch thuật Ngôn ngữ Ký hiệu tiếng Việt 
 
 1. Clone repository này về máy:
    ```bash
-   git clone <URL_CUA_REPO>
+   git clone https://github.com/YuluWusu/Multimodal-Recognition-and-Translation-of-Vietnamese-Sign-Language-to-Text-and-Speech
    cd ViSign2Voice
    ```
 
