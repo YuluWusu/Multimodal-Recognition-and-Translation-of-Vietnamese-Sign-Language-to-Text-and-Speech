@@ -1,7 +1,7 @@
 # ViSign2Voice - Multimodal Recognition and Translation of Vietnamese Sign Language to Text and Speech
 
 ## Giới thiệu
-Dự án Nhận dạng và Dịch thuật Ngôn ngữ Ký hiệu tiếng Việt sang Văn bản và Giọng nói. Hệ thống sử dụng MediaPipe để trích xuất đặc trưng hình thể (pose, hands) và mô hình Deep Learning (Keras) để phân loại các từ vựng ngôn ngữ ký hiệu theo thời gian thực.
+Dự án Nhận dạng và Dịch thuật Ngôn ngữ Ký hiệu tiếng Việt sang Văn bản và Giọng nói. Hệ thống sử dụng MediaPipe để trích xuất đặc trưng hình thể (pose, hands) để phân loại các từ vựng ngôn ngữ ký hiệu theo thời gian thực.
 
 ## Cấu trúc thư mục
 
