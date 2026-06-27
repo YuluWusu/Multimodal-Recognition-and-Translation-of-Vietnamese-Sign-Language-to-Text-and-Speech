@@ -1,5 +1,5 @@
 # Machine Learning & Deep Learning
-tensorflow>=2.15.0  # (Hoặc keras tùy phiên bản bạn dùng)
+tensorflow>=2.15.0  # (Hoặc keras tùy phiên bản )
 # torch>=2.1.0      # Bỏ comment nếu dùng PyTorch
 scikit-learn>=1.3.0
 numpy>=1.24.3
