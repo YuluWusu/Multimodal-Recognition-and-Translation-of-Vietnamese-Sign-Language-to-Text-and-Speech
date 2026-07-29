@@ -55,7 +55,7 @@ def plot_logs(log_file_path, output_image_path):
     plt.tight_layout()
     plt.savefig(output_image_path)
     print(f"Saved chart to {os.path.basename(output_image_path)}")
-    plt.close() # Đóng plot thay vì plt.show() để chạy ngầm không bị chặn
+    plt.close() 
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.abspath(__file__))

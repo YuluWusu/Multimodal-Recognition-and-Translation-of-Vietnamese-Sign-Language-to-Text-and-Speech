@@ -17,7 +17,7 @@ def calculate_metrics(targets, predictions, class_names=None):
     predictions = np.array(predictions)
     
     acc = accuracy_score(targets, predictions)
-    # macro average để tính trung bình không trọng số của các lớp
+    
     precision = precision_score(targets, predictions, average='macro', zero_division=0)
     recall = recall_score(targets, predictions, average='macro', zero_division=0)
     f1 = f1_score(targets, predictions, average='macro', zero_division=0)
@@ -30,7 +30,7 @@ def calculate_metrics(targets, predictions, class_names=None):
     print(f"Recall (Độ phủ trung bình):          {recall * 100:.2f}%")
     print(f"F1-Score (Trung bình điều hòa):      {f1 * 100:.2f}%")
     
-    # In ra báo cáo chi tiết cho từng lớp nếu số lượng lớp không quá khổng lồ
+    
     if class_names is not None and len(class_names) <= 50:
         print("\n--- Báo cáo chi tiết từng lớp ---")
         print(classification_report(targets, predictions, target_names=class_names, zero_division=0))

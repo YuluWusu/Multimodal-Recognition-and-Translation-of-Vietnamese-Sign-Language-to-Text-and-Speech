@@ -11,11 +11,9 @@ from models.bilstm import BiLSTM
 
 def get_model(model_name, num_classes):
     if model_name.lower() == 'bilstm':
-        # Default config for VSL400 3D keypoints
+        
         return BiLSTM(num_joints=76, coords=3, hidden_size=256, num_classes=num_classes)
-    # Add other models here
-    # elif model_name.lower() == 'gcn':
-    #     return GCN(num_classes=num_classes)
+   
     else:
         raise ValueError(f"Model {model_name} không được hỗ trợ!")
 

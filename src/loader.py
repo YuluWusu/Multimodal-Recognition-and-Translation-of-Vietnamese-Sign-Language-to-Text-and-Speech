@@ -16,7 +16,7 @@ class VSL400KeypointDataset3D(Dataset):
         x_sample = np.array(self.X[idx], dtype=np.float32)
         seq_len = x_sample.shape[0]
         
-        # Determine the spatial shape, for example (76, 3) or (228,)
+        
         spatial_shape = x_sample.shape[1:] 
         
         if seq_len >= self.max_len:

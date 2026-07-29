@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 import config
 from src.loader import get_dataloaders
-from train import get_model # Re-use the factory function
+from train import get_model 
 
 def evaluate(args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -18,9 +18,6 @@ def evaluate(args):
         print("❌ Lỗi: Không tìm thấy file dữ liệu test. Vui lòng kiểm tra thư mục data/processed/")
         return
 
-    # We only need test loader, so we can just pass test_path to get_dataloaders
-    # or create a temporary dummy train/val just to get test loader. 
-    # Let's import dataset directly to be cleaner.
     from src.loader import VSL400KeypointDataset3D
     from torch.utils.data import DataLoader
     
