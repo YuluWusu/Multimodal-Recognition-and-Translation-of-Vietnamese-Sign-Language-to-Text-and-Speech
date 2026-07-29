@@ -1,0 +1,163 @@
+import os
+import glob
+import json
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
+from tqdm.notebook import tqdm
+
+# ---------------------------------------------------------
+# 1. TỰ ĐỘNG TÌM DATA_PATH & LOAD LABEL MAP
+# ---------------------------------------------------------
+json_files = glob.glob("/kaggle/input/**/label_map.json", recursive=True)
+DATA_PATH = os.path.dirname(json_files[0]) if json_files else kagglehub.dataset_download("dcdinh/vsl400-processed-data")
+
+with open(os.path.join(DATA_PATH, "label_map.json"), 'r', encoding='utf-8') as f:
+    label_map = json.load(f)
+
+NUM_CLASSES = len(label_map)
+MAX_SEQ_LEN = 60  # Đưa tất cả video về cố định 60 frames
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+print(f"✅ DATA_PATH: {DATA_PATH}")
+print(f"✅ NUM_CLASSES: {NUM_CLASSES} | Thiết bị: {DEVICE}")
+
+# ---------------------------------------------------------
+# 2. DATASET XỬ LÝ PADDING 3D (SEQ_LEN, 76, 3)
+# ---------------------------------------------------------
+class VSL400KeypointDataset3D(Dataset):
+    def __init__(self, npz_path, max_len=60):
+        data = np.load(npz_path, allow_pickle=True)
+        self.X = data['X']
+        self.y = np.array(data['y'], dtype=np.int64)
+        self.max_len = max_len
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, idx):
+        x_sample = np.array(self.X[idx], dtype=np.float32) # Shape: (seq_len, 76, 3)
+        seq_len = x_sample.shape[0]
+        spatial_shape = x_sample.shape[1:] # (76, 3)
+
+        # Cắt hoặc Padding về MAX_SEQ_LEN
+        if seq_len >= self.max_len:
+            x_padded = x_sample[:self.max_len]
+        else:
+            padded_shape = (self.max_len,) + spatial_shape
+            x_padded = np.zeros(padded_shape, dtype=np.float32)
+            x_padded[:seq_len] = x_sample
+
+        return torch.from_numpy(x_padded), torch.tensor(self.y[idx], dtype=torch.long)
+
+# Nạp DataLoader Fold 1
+train_dataset = VSL400KeypointDataset3D(os.path.join(DATA_PATH, "f1_train.npz"), max_len=MAX_SEQ_LEN)
+val_dataset   = VSL400KeypointDataset3D(os.path.join(DATA_PATH, "f1_val.npz"), max_len=MAX_SEQ_LEN)
+
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=2, pin_memory=True)
+val_loader   = DataLoader(val_dataset, batch_size=64, shuffle=False, num_workers=2, pin_memory=True)
+
+# ---------------------------------------------------------
+# 3. KIẾN TRÚC MÔ HÌNH BiLSTM DÀNH CHO KEYPOINTS 3D
+# ---------------------------------------------------------
+class VSL400BiLSTM(nn.Module):
+    def __init__(self, num_joints=76, coords=3, hidden_size=256, num_classes=400):
+        super().__init__()
+        input_size = num_joints * coords # 76 * 3 = 228
+        
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            num_layers=2,
+            batch_first=True,
+            bidirectional=True,
+            dropout=0.3
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(hidden_size * 2, 256),
+            nn.BatchNorm1d(256),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(256, num_classes)
+        )
+
+    def forward(self, x):
+        # x shape: (batch_size, seq_len, 76, 3)
+        batch_size, seq_len, joints, coords = x.shape
+        # Flatten (76, 3) -> 228
+        x = x.view(batch_size, seq_len, joints * coords)
+        
+        out, _ = self.lstm(x)
+        out = out[:, -1, :] # Lấy timestep cuối cùng
+        return self.fc(out)
+
+# Khởi tạo Mô hình
+model = VSL400BiLSTM(num_joints=76, coords=3, hidden_size=256, num_classes=NUM_CLASSES).to(DEVICE)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=3)
+
+# ---------------------------------------------------------
+# 4. HOÀN THIỆN VÒNG LẶP HUẤN LƯỢNG (TRAINING LOOP)
+# ---------------------------------------------------------
+EPOCHS = 30
+best_acc = 0.0
+SAVE_PATH = "/kaggle/working/best_bilstm_vsl400.pth"
+
+print("\n🚀 Bắt đầu huấn luyện mô hình BiLSTM...")
+
+for epoch in range(1, EPOCHS + 1):
+    # Train Phase
+    model.train()
+    train_loss, correct_train, total_train = 0.0, 0, 0
+    for x_batch, y_batch in tqdm(train_loader, desc=f"Epoch {epoch:02d}/{EPOCHS} [Train]"):
+        x_batch, y_batch = x_batch.to(DEVICE), y_batch.to(DEVICE)
+
+        optimizer.zero_grad()
+        outputs = model(x_batch)
+        loss = criterion(outputs, y_batch)
+        loss.backward()
+        
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+        optimizer.step()
+
+        train_loss += loss.item()
+        preds = outputs.argmax(dim=-1)
+        correct_train += (preds == y_batch).sum().item()
+        total_train += y_batch.size(0)
+
+    train_acc = 100 * correct_train / total_train
+    avg_train_loss = train_loss / len(train_loader)
+
+    # Validation Phase
+    model.eval()
+    val_loss, correct_val, total_val = 0.0, 0, 0
+    with torch.no_grad():
+        for x_batch, y_batch in val_loader:
+            x_batch, y_batch = x_batch.to(DEVICE), y_batch.to(DEVICE)
+
+            outputs = model(x_batch)
+            loss = criterion(outputs, y_batch)
+
+            val_loss += loss.item()
+            preds = outputs.argmax(dim=-1)
+            correct_val += (preds == y_batch).sum().item()
+            total_val += y_batch.size(0)
+
+    val_acc = 100 * correct_val / total_val
+    avg_val_loss = val_loss / len(val_loader)
+
+    scheduler.step(val_acc)
+
+    print(f"Epoch {epoch:02d}/{EPOCHS} | "
+          f"Train Loss: {avg_train_loss:.4f} - Train Acc: {train_acc:.2f}% | "
+          f"Val Loss: {avg_val_loss:.4f} - Val Acc: {val_acc:.2f}%")
+
+    if val_acc > best_acc:
+        best_acc = val_acc
+        torch.save(model.state_dict(), SAVE_PATH)
+        print(f"  --> [Saved Model] Đạt Val Acc cao nhất: {best_acc:.2f}%")
+
+print(f"\n🎉 Hoàn tất! Model chuẩn bị xuất file tại: {SAVE_PATH} (Best Acc: {best_acc:.2f}%)")

@@ -1,0 +1,242 @@
+✅ DATA_PATH: /kaggle/input/datasets/tohunh/vsl400-processed-data
+✅ NUM_CLASSES: 400 | Thiết bị: cuda
+
+🚀 Bắt đầu huấn luyện mô hình BiLSTM...
+Epoch 01/60 [Train]: 100%
+ 271/271 [00:08<00:00, 42.93it/s]
+Epoch 01/60 | Train Loss: 5.1793 - Train Acc: 3.11% | Val Loss: 4.2506 - Val Acc: 7.59%
+  --> [Saved Model] Đạt Val Acc cao nhất: 7.59%
+Epoch 02/60 [Train]: 100%
+ 271/271 [00:06<00:00, 42.48it/s]
+Epoch 02/60 | Train Loss: 3.8001 - Train Acc: 11.91% | Val Loss: 3.2376 - Val Acc: 20.33%
+  --> [Saved Model] Đạt Val Acc cao nhất: 20.33%
+Epoch 03/60 [Train]: 100%
+ 271/271 [00:06<00:00, 42.19it/s]
+Epoch 03/60 | Train Loss: 2.8141 - Train Acc: 27.40% | Val Loss: 2.2617 - Val Acc: 40.75%
+  --> [Saved Model] Đạt Val Acc cao nhất: 40.75%
+Epoch 04/60 [Train]: 100%
+ 271/271 [00:06<00:00, 41.97it/s]
+Epoch 04/60 | Train Loss: 2.0841 - Train Acc: 43.37% | Val Loss: 1.7045 - Val Acc: 52.11%
+  --> [Saved Model] Đạt Val Acc cao nhất: 52.11%
+Epoch 05/60 [Train]: 100%
+ 271/271 [00:06<00:00, 41.20it/s]
+Epoch 05/60 | Train Loss: 1.5584 - Train Acc: 55.77% | Val Loss: 1.3574 - Val Acc: 61.08%
+  --> [Saved Model] Đạt Val Acc cao nhất: 61.08%
+Epoch 06/60 [Train]: 100%
+ 271/271 [00:06<00:00, 40.89it/s]
+Epoch 06/60 | Train Loss: 1.2083 - Train Acc: 65.23% | Val Loss: 1.0992 - Val Acc: 67.82%
+  --> [Saved Model] Đạt Val Acc cao nhất: 67.82%
+Epoch 07/60 [Train]: 100%
+ 271/271 [00:06<00:00, 40.27it/s]
+Epoch 07/60 | Train Loss: 0.9760 - Train Acc: 71.82% | Val Loss: 1.0031 - Val Acc: 70.99%
+  --> [Saved Model] Đạt Val Acc cao nhất: 70.99%
+Epoch 08/60 [Train]: 100%
+ 271/271 [00:06<00:00, 40.07it/s]
+Epoch 08/60 | Train Loss: 0.8144 - Train Acc: 75.81% | Val Loss: 0.9326 - Val Acc: 72.58%
+  --> [Saved Model] Đạt Val Acc cao nhất: 72.58%
+Epoch 09/60 [Train]: 100%
+ 271/271 [00:06<00:00, 39.25it/s]
+Epoch 09/60 | Train Loss: 0.6966 - Train Acc: 78.84% | Val Loss: 0.8505 - Val Acc: 75.68%
+  --> [Saved Model] Đạt Val Acc cao nhất: 75.68%
+Epoch 10/60 [Train]: 100%
+ 271/271 [00:07<00:00, 39.15it/s]
+Epoch 10/60 | Train Loss: 0.5992 - Train Acc: 81.47% | Val Loss: 0.7957 - Val Acc: 77.54%
+  --> [Saved Model] Đạt Val Acc cao nhất: 77.54%
+Epoch 11/60 [Train]: 100%
+ 271/271 [00:07<00:00, 38.98it/s]
+Epoch 11/60 | Train Loss: 0.5178 - Train Acc: 83.85% | Val Loss: 0.7388 - Val Acc: 79.15%
+  --> [Saved Model] Đạt Val Acc cao nhất: 79.15%
+Epoch 12/60 [Train]: 100%
+ 271/271 [00:07<00:00, 38.48it/s]
+Epoch 12/60 | Train Loss: 0.4615 - Train Acc: 85.66% | Val Loss: 0.7545 - Val Acc: 79.18%
+  --> [Saved Model] Đạt Val Acc cao nhất: 79.18%
+Epoch 13/60 [Train]: 100%
+ 271/271 [00:07<00:00, 38.30it/s]
+Epoch 13/60 | Train Loss: 0.4152 - Train Acc: 86.45% | Val Loss: 0.7007 - Val Acc: 80.99%
+  --> [Saved Model] Đạt Val Acc cao nhất: 80.99%
+Epoch 14/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.62it/s]
+Epoch 14/60 | Train Loss: 0.3644 - Train Acc: 88.20% | Val Loss: 0.7023 - Val Acc: 82.47%
+  --> [Saved Model] Đạt Val Acc cao nhất: 82.47%
+Epoch 15/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.29it/s]
+Epoch 15/60 | Train Loss: 0.3309 - Train Acc: 89.31% | Val Loss: 0.7253 - Val Acc: 82.12%
+Epoch 16/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.93it/s]
+Epoch 16/60 | Train Loss: 0.3109 - Train Acc: 89.90% | Val Loss: 0.6958 - Val Acc: 82.90%
+  --> [Saved Model] Đạt Val Acc cao nhất: 82.90%
+Epoch 17/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.49it/s]
+Epoch 17/60 | Train Loss: 0.2790 - Train Acc: 90.51% | Val Loss: 0.7026 - Val Acc: 82.71%
+Epoch 18/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.39it/s]
+Epoch 18/60 | Train Loss: 0.2579 - Train Acc: 91.52% | Val Loss: 0.7200 - Val Acc: 82.39%
+Epoch 19/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.44it/s]
+Epoch 19/60 | Train Loss: 0.2528 - Train Acc: 91.63% | Val Loss: 0.7039 - Val Acc: 82.90%
+Epoch 20/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.80it/s]
+Epoch 20/60 | Train Loss: 0.2248 - Train Acc: 92.52% | Val Loss: 0.6977 - Val Acc: 83.19%
+  --> [Saved Model] Đạt Val Acc cao nhất: 83.19%
+Epoch 21/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.12it/s]
+Epoch 21/60 | Train Loss: 0.2074 - Train Acc: 92.98% | Val Loss: 0.7225 - Val Acc: 82.98%
+Epoch 22/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.09it/s]
+Epoch 22/60 | Train Loss: 0.2010 - Train Acc: 93.25% | Val Loss: 0.7214 - Val Acc: 83.54%
+  --> [Saved Model] Đạt Val Acc cao nhất: 83.54%
+Epoch 23/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.15it/s]
+Epoch 23/60 | Train Loss: 0.1812 - Train Acc: 93.91% | Val Loss: 0.7279 - Val Acc: 83.46%
+Epoch 24/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.21it/s]
+Epoch 24/60 | Train Loss: 0.1737 - Train Acc: 94.17% | Val Loss: 0.7331 - Val Acc: 83.52%
+Epoch 25/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.96it/s]
+Epoch 25/60 | Train Loss: 0.1679 - Train Acc: 94.24% | Val Loss: 0.7322 - Val Acc: 84.06%
+  --> [Saved Model] Đạt Val Acc cao nhất: 84.06%
+Epoch 26/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.08it/s]
+Epoch 26/60 | Train Loss: 0.1604 - Train Acc: 94.76% | Val Loss: 0.7264 - Val Acc: 84.46%
+  --> [Saved Model] Đạt Val Acc cao nhất: 84.46%
+Epoch 27/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.28it/s]
+Epoch 27/60 | Train Loss: 0.1526 - Train Acc: 95.03% | Val Loss: 0.7698 - Val Acc: 83.63%
+Epoch 28/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.96it/s]
+Epoch 28/60 | Train Loss: 0.1416 - Train Acc: 95.31% | Val Loss: 0.7392 - Val Acc: 84.76%
+  --> [Saved Model] Đạt Val Acc cao nhất: 84.76%
+Epoch 29/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.99it/s]
+Epoch 29/60 | Train Loss: 0.1400 - Train Acc: 95.39% | Val Loss: 0.7644 - Val Acc: 84.30%
+Epoch 30/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.04it/s]
+Epoch 30/60 | Train Loss: 0.1301 - Train Acc: 95.77% | Val Loss: 0.7854 - Val Acc: 84.62%
+Epoch 31/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.18it/s]
+Epoch 31/60 | Train Loss: 0.1200 - Train Acc: 95.99% | Val Loss: 0.7817 - Val Acc: 84.65%
+Epoch 32/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.98it/s]
+Epoch 32/60 | Train Loss: 0.1210 - Train Acc: 95.97% | Val Loss: 0.7897 - Val Acc: 84.54%
+Epoch 33/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.11it/s]
+Epoch 33/60 | Train Loss: 0.0569 - Train Acc: 98.30% | Val Loss: 0.6772 - Val Acc: 86.99%
+  --> [Saved Model] Đạt Val Acc cao nhất: 86.99%
+Epoch 34/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.16it/s]
+Epoch 34/60 | Train Loss: 0.0346 - Train Acc: 98.94% | Val Loss: 0.7009 - Val Acc: 87.31%
+  --> [Saved Model] Đạt Val Acc cao nhất: 87.31%
+Epoch 35/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.98it/s]
+Epoch 35/60 | Train Loss: 0.0302 - Train Acc: 99.02% | Val Loss: 0.6898 - Val Acc: 87.64%
+  --> [Saved Model] Đạt Val Acc cao nhất: 87.64%
+Epoch 36/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.97it/s]
+Epoch 36/60 | Train Loss: 0.0306 - Train Acc: 99.01% | Val Loss: 0.6983 - Val Acc: 87.31%
+Epoch 37/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.02it/s]
+Epoch 37/60 | Train Loss: 0.0258 - Train Acc: 99.15% | Val Loss: 0.6998 - Val Acc: 86.43%
+Epoch 38/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.88it/s]
+Epoch 38/60 | Train Loss: 0.0247 - Train Acc: 99.29% | Val Loss: 0.7305 - Val Acc: 87.07%
+Epoch 39/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.98it/s]
+Epoch 39/60 | Train Loss: 0.0262 - Train Acc: 99.13% | Val Loss: 0.7626 - Val Acc: 86.16%
+Epoch 40/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.95it/s]
+Epoch 40/60 | Train Loss: 0.0133 - Train Acc: 99.61% | Val Loss: 0.7269 - Val Acc: 87.48%
+Epoch 41/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.96it/s]
+Epoch 41/60 | Train Loss: 0.0079 - Train Acc: 99.82% | Val Loss: 0.7037 - Val Acc: 87.58%
+Epoch 42/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.95it/s]
+Epoch 42/60 | Train Loss: 0.0056 - Train Acc: 99.90% | Val Loss: 0.7042 - Val Acc: 87.93%
+  --> [Saved Model] Đạt Val Acc cao nhất: 87.93%
+Epoch 43/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.99it/s]
+Epoch 43/60 | Train Loss: 0.0043 - Train Acc: 99.93% | Val Loss: 0.7019 - Val Acc: 87.93%
+Epoch 44/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.11it/s]
+Epoch 44/60 | Train Loss: 0.0057 - Train Acc: 99.86% | Val Loss: 0.6930 - Val Acc: 88.12%
+  --> [Saved Model] Đạt Val Acc cao nhất: 88.12%
+Epoch 45/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.06it/s]
+Epoch 45/60 | Train Loss: 0.0059 - Train Acc: 99.85% | Val Loss: 0.7161 - Val Acc: 87.91%
+Epoch 46/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.03it/s]
+Epoch 46/60 | Train Loss: 0.0062 - Train Acc: 99.86% | Val Loss: 0.7367 - Val Acc: 87.66%
+Epoch 47/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.93it/s]
+Epoch 47/60 | Train Loss: 0.0078 - Train Acc: 99.82% | Val Loss: 0.7224 - Val Acc: 87.91%
+Epoch 48/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.17it/s]
+Epoch 48/60 | Train Loss: 0.0055 - Train Acc: 99.88% | Val Loss: 0.7264 - Val Acc: 88.10%
+Epoch 49/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.94it/s]
+Epoch 49/60 | Train Loss: 0.0030 - Train Acc: 99.96% | Val Loss: 0.7395 - Val Acc: 87.93%
+Epoch 50/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.98it/s]
+Epoch 50/60 | Train Loss: 0.0023 - Train Acc: 99.97% | Val Loss: 0.7308 - Val Acc: 88.31%
+  --> [Saved Model] Đạt Val Acc cao nhất: 88.31%
+Epoch 51/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.05it/s]
+Epoch 51/60 | Train Loss: 0.0023 - Train Acc: 99.97% | Val Loss: 0.7265 - Val Acc: 88.28%
+Epoch 52/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.99it/s]
+Epoch 52/60 | Train Loss: 0.0020 - Train Acc: 99.98% | Val Loss: 0.7450 - Val Acc: 88.31%
+Epoch 53/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.02it/s]
+Epoch 53/60 | Train Loss: 0.0019 - Train Acc: 99.97% | Val Loss: 0.7519 - Val Acc: 88.20%
+Epoch 54/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.95it/s]
+Epoch 54/60 | Train Loss: 0.0016 - Train Acc: 99.99% | Val Loss: 0.7472 - Val Acc: 88.58%
+  --> [Saved Model] Đạt Val Acc cao nhất: 88.58%
+Epoch 55/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.06it/s]
+Epoch 55/60 | Train Loss: 0.0016 - Train Acc: 99.98% | Val Loss: 0.7508 - Val Acc: 88.31%
+Epoch 56/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.05it/s]
+Epoch 56/60 | Train Loss: 0.0017 - Train Acc: 99.97% | Val Loss: 0.7548 - Val Acc: 88.58%
+Epoch 57/60 [Train]: 100%
+ 271/271 [00:07<00:00, 37.04it/s]
+Epoch 57/60 | Train Loss: 0.0032 - Train Acc: 99.95% | Val Loss: 0.7625 - Val Acc: 88.34%
+Epoch 58/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.99it/s]
+Epoch 58/60 | Train Loss: 0.0027 - Train Acc: 99.92% | Val Loss: 0.7709 - Val Acc: 88.45%
+Epoch 59/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.89it/s]
+Epoch 59/60 | Train Loss: 0.0016 - Train Acc: 99.98% | Val Loss: 0.7502 - Val Acc: 88.45%
+Epoch 60/60 [Train]: 100%
+ 271/271 [00:07<00:00, 36.90it/s]
+Epoch 60/60 | Train Loss: 0.0014 - Train Acc: 99.98% | Val Loss: 0.7473 - Val Acc: 88.34%
+
+🎉 Hoàn tất! Model chuẩn bị xuất file tại: /kaggle/working/best_bilstm_vsl400.pth (Best Acc: 88.58%)
+
+
+
+
+✅ Đã nạp thành công weights từ: /kaggle/working/best_bilstm_vsl400.pth
+Testing: 100%
+ 59/59 [00:00<00:00, 85.13it/s]
+
+==================================================
+📊 KẾT QUẢ TẬP TEST (f1_test.npz)
+==================================================
+Tổng số mẫu test:   3713
+Test Loss:          0.7447
+Test Accuracy:      88.90%
+==================================================
+
+🔍 XEM THỬ 10 DỰ ĐOÁN MẪU:
+STT   | Nhãn Thực Tế (Ground Truth)    | Mô Hình Dự Đoán (Prediction)   | Kết quả
+--------------------------------------------------------------------------------
+1     | Không cần                      | Đắng                           | ❌ SAI
+2     | Bia                            | Bia                            | ✅ ĐÚNG
+3     | Buổi chiều                     | Buổi chiều                     | ✅ ĐÚNG
+4     | Đi                             | Đi                             | ✅ ĐÚNG
+5     | Kế toán                        | Kế toán                        | ✅ ĐÚNG
+6     | Cô                             | Cô                             | ✅ ĐÚNG
+7     | Viên phấn                      | Viên phấn                      | ✅ ĐÚNG
+8     | Nhầm lẫn                       | Nhầm lẫn                       | ✅ ĐÚNG
+9     | Dây chuyền                     | Dây chuyền                     | ✅ ĐÚNG
+10    | Lạnh                           | Lạnh                           | ✅ ĐÚNG

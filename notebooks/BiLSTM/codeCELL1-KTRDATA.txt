@@ -1,0 +1,66 @@
+import os
+import glob
+import json
+import numpy as np
+import torch
+from torch.utils.data import Dataset, DataLoader
+
+# 1. TỰ ĐỘNG TÌM DATA_PATH
+json_files = glob.glob("/kaggle/input/**/label_map.json", recursive=True)
+
+if json_files:
+    DATA_PATH = os.path.dirname(json_files[0])
+    print(f"✅ Đã tìm thấy DATA_PATH: {DATA_PATH}")
+else:
+    import kagglehub
+    DATA_PATH = kagglehub.dataset_download("dcdinh/vsl400-processed-data")
+
+# 2. ĐỌC LABEL MAP
+label_map_path = os.path.join(DATA_PATH, "label_map.json")
+with open(label_map_path, 'r', encoding='utf-8') as f:
+    label_map = json.load(f)
+
+NUM_CLASSES = len(label_map)
+print(f"Tổng số lớp: {NUM_CLASSES}")
+
+# 3. ĐỊNH NGHĨA DATASET (ĐÃ SỬA LỖI allow_pickle & PADDING)
+class VSL400KeypointDataset(Dataset):
+    def __init__(self, npz_path, max_len=60):
+        # Mở file cho phép allow_pickle=True
+        data = np.load(npz_path, allow_pickle=True)
+        self.X = data['X']
+        self.y = np.array(data['y'], dtype=np.int64)
+        self.max_len = max_len
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, idx):
+        # Ép từng sample về kiểu numpy float32
+        x_sample = np.array(self.X[idx], dtype=np.float32)
+        
+        # Nếu dữ liệu dạng 2D (seq_len, feature_dim), ta tiến hành Padding/Truncate
+        if x_sample.ndim == 2:
+            seq_len, feature_dim = x_sample.shape
+            if seq_len >= self.max_len:
+                # Cắt bớt nếu dài hơn MAX_SEQ_LEN
+                x_padded = x_sample[:self.max_len, :]
+            else:
+                # Chèn số 0 (padding) nếu ngắn hơn MAX_SEQ_LEN
+                x_padded = np.zeros((self.max_len, feature_dim), dtype=np.float32)
+                x_padded[:seq_len, :] = x_sample
+            x_sample = x_padded
+
+        return torch.from_numpy(x_sample), torch.tensor(self.y[idx], dtype=torch.long)
+
+# 4. NAP DATALOADER FOLD 1
+train_dataset = VSL400KeypointDataset(os.path.join(DATA_PATH, "f1_train.npz"), max_len=60)
+val_dataset   = VSL400KeypointDataset(os.path.join(DATA_PATH, "f1_val.npz"), max_len=60)
+
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=2, pin_memory=True)
+val_loader   = DataLoader(val_dataset, batch_size=64, shuffle=False, num_workers=2, pin_memory=True)
+
+# 5. KIỂM TRA LẠI SHAPE
+sample_x, sample_y = train_dataset[0]
+print(f"✅ Shape của 1 mẫu dữ liệu X: {sample_x.shape}") # Sẽ ra dạng (60, feature_dim)
+print(f"✅ Label y: {sample_y}")

@@ -1,0 +1,146 @@
+import os
+import glob
+import json
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+from tqdm.notebook import tqdm
+
+# 1. CẤU HÌNH & THIẾT BỊ
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+MAX_SEQ_LEN = 60
+SAVE_PATH = "/kaggle/working/best_bilstm_vsl400.pth"
+
+# Tìm DATA_PATH & Label Map
+json_files = glob.glob("/kaggle/input/**/label_map.json", recursive=True)
+DATA_PATH = os.path.dirname(json_files[0])
+
+with open(os.path.join(DATA_PATH, "label_map.json"), 'r', encoding='utf-8') as f:
+    label_map = json.load(f)
+
+NUM_CLASSES = len(label_map)
+
+# Tạo ánh xạ ngược từ Index -> Tên nhãn (Từ ký hiệu)
+if isinstance(label_map, dict):
+    # Nếu label_map có dạng {"từ": 0, "từ_2": 1, ...}
+    idx_to_label = {v: k for k, v in label_map.items()}
+else:
+    # Nếu label_map là dạng list ["từ_0", "từ_1", ...]
+    idx_to_label = {i: name for i, name in enumerate(label_map)}
+
+# 2. DEFINITION DATASET & MODEL (Tương thích với file đã train)
+class VSL400KeypointDataset3D(Dataset):
+    def __init__(self, npz_path, max_len=60):
+        data = np.load(npz_path, allow_pickle=True)
+        self.X = data['X']
+        self.y = np.array(data['y'], dtype=np.int64)
+        self.max_len = max_len
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, idx):
+        x_sample = np.array(self.X[idx], dtype=np.float32)
+        seq_len = x_sample.shape[0]
+        spatial_shape = x_sample.shape[1:]
+
+        if seq_len >= self.max_len:
+            x_padded = x_sample[:self.max_len]
+        else:
+            padded_shape = (self.max_len,) + spatial_shape
+            x_padded = np.zeros(padded_shape, dtype=np.float32)
+            x_padded[:seq_len] = x_sample
+
+        return torch.from_numpy(x_padded), torch.tensor(self.y[idx], dtype=torch.long)
+
+class VSL400BiLSTM(nn.Module):
+    def __init__(self, num_joints=76, coords=3, hidden_size=256, num_classes=400):
+        super().__init__()
+        input_size = num_joints * coords
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            num_layers=2,
+            batch_first=True,
+            bidirectional=True,
+            dropout=0.3
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(hidden_size * 2, 256),
+            nn.BatchNorm1d(256),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(256, num_classes)
+        )
+
+    def forward(self, x):
+        batch_size, seq_len, joints, coords = x.shape
+        x = x.view(batch_size, seq_len, joints * coords)
+        out, _ = self.lstm(x)
+        out = out[:, -1, :]
+        return self.fc(out)
+
+# 3. NAP TẬP TEST & LOAD WEIGHTS MODEL
+test_dataset = VSL400KeypointDataset3D(os.path.join(DATA_PATH, "f1_test.npz"), max_len=MAX_SEQ_LEN)
+test_loader  = DataLoader(test_dataset, batch_size=64, shuffle=False)
+
+model = VSL400BiLSTM(num_joints=76, coords=3, hidden_size=256, num_classes=NUM_CLASSES).to(DEVICE)
+
+# Nạp file trọng số .pth đã train
+if os.path.exists(SAVE_PATH):
+    model.load_state_dict(torch.load(SAVE_PATH, map_location=DEVICE))
+    print(f"✅ Đã nạp thành công weights từ: {SAVE_PATH}")
+else:
+    print(f"❌ KHÔNG tìm thấy file model tại {SAVE_PATH}. Vui lòng chạy cell train trước!")
+
+# 4. CHẠY TEST ĐÁNH GIÁ (INFERENCE)
+criterion = nn.CrossEntropyLoss()
+model.eval()
+
+test_loss = 0.0
+correct = 0
+total = 0
+
+all_preds = []
+all_targets = []
+
+with torch.no_grad():
+    for x_batch, y_batch in tqdm(test_loader, desc="Testing"):
+        x_batch, y_batch = x_batch.to(DEVICE), y_batch.to(DEVICE)
+        
+        outputs = model(x_batch)
+        loss = criterion(outputs, y_batch)
+        
+        test_loss += loss.item()
+        preds = outputs.argmax(dim=-1)
+        
+        correct += (preds == y_batch).sum().item()
+        total += y_batch.size(0)
+        
+        all_preds.extend(preds.cpu().numpy())
+        all_targets.extend(y_batch.cpu().numpy())
+
+test_acc = 100 * correct / total
+avg_test_loss = test_loss / len(test_loader)
+
+# 5. IN KẾT QUẢ TỔNG QUAN
+print("\n" + "="*50)
+print(f"📊 KẾT QUẢ TẬP TEST (f1_test.npz)")
+print("="*50)
+print(f"Tổng số mẫu test:   {total}")
+print(f"Test Loss:          {avg_test_loss:.4f}")
+print(f"Test Accuracy:      {test_acc:.2f}%")
+print("="*50)
+
+# 6. IN VÀI MẪU DỰ ĐOÁN THỰC TẾ
+print("\n🔍 XEM THỬ 10 DỰ ĐOÁN MẪU:")
+print(f"{'STT':<5} | {'Nhãn Thực Tế (Ground Truth)':<30} | {'Mô Hình Dự Đoán (Prediction)':<30} | {'Kết quả'}")
+print("-" * 80)
+
+for i in range(min(10, len(all_preds))):
+    actual_name = idx_to_label.get(all_targets[i], f"Class {all_targets[i]}")
+    pred_name   = idx_to_label.get(all_preds[i], f"Class {all_preds[i]}")
+    status      = "✅ ĐÚNG" if all_targets[i] == all_preds[i] else "❌ SAI"
+    
+    print(f"{i+1:<5} | {actual_name:<30} | {pred_name:<30} | {status}")
